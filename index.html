@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Three Months With You</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink-1:#fff5f7;
+    --pink-2:#ffe3ea;
+    --pink-3:#ffc2d1;
+    --pink-4:#ff8fab;
+    --rose:#e0607e;
+    --deep:#7a2e42;
+    --cream:#fffaf6;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{
+    font-family:'Poppins', sans-serif;
+    background:linear-gradient(180deg, var(--pink-1) 0%, var(--pink-2) 40%, var(--cream) 100%);
+    color:var(--deep);
+    overflow:hidden;
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center;
+  }
+
+  .hearts-bg{ position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+  .heart-particle{
+    position:absolute; bottom:-10%; font-size:1.4rem; opacity:.55;
+    animation:floatUp linear infinite; color:var(--pink-4);
+  }
+  @keyframes floatUp{
+    0%{ transform:translateY(0) translateX(0) rotate(0deg); opacity:0; }
+    10%{ opacity:.6; }
+    90%{ opacity:.5; }
+    100%{ transform:translateY(-110vh) translateX(20px) rotate(25deg); opacity:0; }
+  }
+
+  .wrap{
+    position:relative; z-index:1; padding:2rem 1.5rem; max-width:480px;
+    transition:opacity .5s ease, transform .5s ease;
+  }
+  .wrap.fading{ opacity:0; transform:scale(.96); }
+
+  .envelope{
+    font-size:3.2rem; margin-bottom:1.2rem;
+    animation:pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse{ 0%,100%{ transform:scale(1);} 50%{ transform:scale(1.12);} }
+
+  .eyebrow{
+    letter-spacing:.35em; text-transform:uppercase; font-size:.72rem;
+    color:var(--rose); font-weight:500; margin-bottom:.8rem;
+  }
+  h1{
+    font-family:'Playfair Display', serif;
+    font-size:clamp(1.9rem, 6vw, 2.6rem);
+    margin:0 0 .9rem 0; color:var(--deep); line-height:1.25;
+  }
+  p.sub{
+    font-size:1rem; color:#8a5a68; line-height:1.7; margin:0 0 2.2rem 0;
+  }
+
+  button#openBtn{
+    font-family:'Poppins', sans-serif; font-weight:500; font-size:.95rem;
+    letter-spacing:.03em; color:#fff; background:linear-gradient(135deg, var(--pink-4), var(--rose));
+    border:none; border-radius:999px; padding:.95rem 2.3rem; cursor:pointer;
+    box-shadow:0 15px 30px -12px rgba(224,96,126,.55);
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  button#openBtn:hover{ transform:translateY(-2px); box-shadow:0 20px 34px -12px rgba(224,96,126,.6); }
+  button#openBtn:active{ transform:translateY(0) scale(.98); }
+  button#openBtn:disabled{ opacity:.7; cursor:default; transform:none; }
+
+  .status{
+    margin-top:1.4rem; font-size:.8rem; color:var(--rose); letter-spacing:.05em; min-height:1.2em;
+  }
+  .error{
+    margin-top:1.4rem; font-size:.85rem; color:var(--rose); background:#fff;
+    border:1px dashed var(--pink-3); border-radius:14px; padding:.9rem 1.1rem; line-height:1.6; display:none;
+  }
+</style>
+</head>
+<body>
+
+<div class="hearts-bg" id="heartsBg"></div>
+
+<div class="wrap" id="wrap">
+  <div class="envelope">💌</div>
+  <div class="eyebrow">A little something</div>
+  <h1>For My <em style="color:var(--rose); font-style:italic;">Favorite Person</em></h1>
+  <p class="sub">I made you something. Tap below whenever you're ready to open it.</p>
+  <button id="openBtn">Open it 💗</button>
+  <div class="status" id="status"></div>
+  <div class="error" id="error">
+    Couldn't load the surprise right now — make sure <code>3-month.html</code> is sitting right next to this page, then refresh and try again.
+  </div>
+</div>
+
+<script>
+(function(){
+  // floating hearts background
+  const bg = document.getElementById('heartsBg');
+  const symbols = ['💗','💕','🤍','♡'];
+  for(let i=0;i<16;i++){
+    const el = document.createElement('div');
+    el.className = 'heart-particle';
+    el.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+    el.style.left = Math.random()*100 + 'vw';
+    el.style.fontSize = (1 + Math.random()*1.4) + 'rem';
+    el.style.animationDuration = (10 + Math.random()*12) + 's';
+    el.style.animationDelay = (Math.random()*14) + 's';
+    bg.appendChild(el);
+  }
+
+  const btn = document.getElementById('openBtn');
+  const wrap = document.getElementById('wrap');
+  const status = document.getElementById('status');
+  const errorBox = document.getElementById('error');
+
+  btn.addEventListener('click', function(){
+    btn.disabled = true;
+    status.textContent = 'opening...';
+    errorBox.style.display = 'none';
+
+    fetch('3-month.html')
+      .then(function(res){
+        if(!res.ok) throw new Error('HTTP ' + res.status);
+        return res.text();
+      })
+      .then(function(html){
+        wrap.classList.add('fading');
+        setTimeout(function(){
+          // Full document swap so the fetched page's own <script> tags run correctly
+          document.open();
+          document.write(html);
+          document.close();
+        }, 450);
+      })
+      .catch(function(err){
+        btn.disabled = false;
+        status.textContent = '';
+        errorBox.style.display = 'block';
+        console.error('Failed to load 3-month.html:', err);
+      });
+  });
+})();
+</script>
+
+</body>
+</html>
