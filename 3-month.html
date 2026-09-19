@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Three Months With You</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink-1:#fff5f7;
+    --pink-2:#ffe3ea;
+    --pink-3:#ffc2d1;
+    --pink-4:#ff8fab;
+    --rose:#e0607e;
+    --deep:#7a2e42;
+    --cream:#fffaf6;
+    --gold:#e8b25c;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Poppins', sans-serif;
+    background:linear-gradient(180deg, var(--pink-1) 0%, var(--pink-2) 40%, var(--cream) 100%);
+    color:var(--deep);
+    overflow-x:hidden;
+  }
+
+  /* Floating hearts background */
+  .hearts-bg{
+    position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden;
+  }
+  .heart-particle{
+    position:absolute; bottom:-10%; font-size:1.4rem; opacity:.55;
+    animation:floatUp linear infinite;
+    color:var(--pink-4);
+  }
+  @keyframes floatUp{
+    0%{ transform:translateY(0) translateX(0) rotate(0deg); opacity:0; }
+    10%{ opacity:.6; }
+    90%{ opacity:.5; }
+    100%{ transform:translateY(-110vh) translateX(20px) rotate(25deg); opacity:0; }
+  }
+
+  section{ position:relative; z-index:1; }
+
+  /* Hero */
+  .hero{
+    min-height:100vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:2rem 1.5rem;
+  }
+  .hero .eyebrow{
+    letter-spacing:.35em; text-transform:uppercase; font-size:.75rem;
+    color:var(--rose); font-weight:500; margin-bottom:1rem;
+  }
+  .hero h1{
+    font-family:'Playfair Display', serif;
+    font-size:clamp(2.4rem, 7vw, 4.5rem);
+    margin:0 0 1rem 0;
+    color:var(--deep);
+    line-height:1.1;
+  }
+  .hero h1 em{ color:var(--rose); font-style:italic; }
+  .hero p.sub{
+    max-width:520px; font-size:1.05rem; color:#8a5a68; line-height:1.7;
+    margin:0 auto;
+  }
+  .hero .heart-icon{ font-size:2.2rem; margin-bottom:1rem; animation:pulse 1.8s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ transform:scale(1);} 50%{ transform:scale(1.15);} }
+  .scroll-hint{
+    margin-top:3rem; font-size:.8rem; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--rose); opacity:.7; animation:bounce 2s infinite;
+  }
+  @keyframes bounce{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(8px);} }
+
+  /* Section heading shared */
+  .section-heading{
+    text-align:center; margin:0 auto 2.5rem auto; max-width:600px; padding:0 1.5rem;
+  }
+  .section-heading .tag{
+    letter-spacing:.3em; text-transform:uppercase; font-size:.7rem; color:var(--rose); font-weight:500;
+  }
+  .section-heading h2{
+    font-family:'Playfair Display', serif; font-size:clamp(1.8rem, 4vw, 2.6rem);
+    margin:.5rem 0 0 0; color:var(--deep);
+  }
+
+  /* Carousel */
+  .carousel-section{ padding:5rem 0; }
+  .carousel-wrap{
+    max-width:720px; margin:0 auto; padding:0 1.5rem;
+  }
+  .carousel{
+    position:relative; border-radius:24px; overflow:hidden;
+    box-shadow:0 30px 60px -20px rgba(224,96,126,.35), 0 0 0 8px #fff;
+    aspect-ratio:4/5; background:linear-gradient(135deg, var(--pink-3), var(--pink-4));
+  }
+  .carousel-track{
+    display:flex; height:100%; transition:transform .55s cubic-bezier(.65,0,.35,1);
+  }
+  .slide{
+    min-width:100%; height:100%; position:relative;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .slide img{
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .slide .placeholder{
+    width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    color:#fff; background:linear-gradient(135deg, var(--pink-4), var(--rose));
+    gap:.6rem; text-align:center; padding:1.5rem;
+  }
+  .slide .placeholder .num{ font-family:'Playfair Display', serif; font-size:3rem; opacity:.85; }
+  .slide .placeholder small{ opacity:.85; font-size:.85rem; max-width:260px; line-height:1.5; }
+  .slide .caption{
+    position:absolute; bottom:0; left:0; right:0;
+    background:linear-gradient(0deg, rgba(0,0,0,.45), transparent);
+    color:#fff; padding:1.5rem 1.2rem .9rem; font-size:.85rem; letter-spacing:.03em;
+    opacity:0; transition:opacity .3s ease;
+  }
+  .slide:hover .caption{ opacity:1; }
+
+  .carousel-btn{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:44px; height:44px; border-radius:50%; border:none;
+    background:rgba(255,255,255,.85); color:var(--rose); font-size:1.2rem;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    box-shadow:0 6px 16px rgba(0,0,0,.15); z-index:3; transition:.2s;
+  }
+  .carousel-btn:hover{ background:#fff; transform:translateY(-50%) scale(1.08); }
+  .carousel-btn.prev{ left:14px; }
+  .carousel-btn.next{ right:14px; }
+
+  .dots{
+    display:flex; justify-content:center; gap:7px; margin-top:1.3rem; flex-wrap:wrap; padding:0 1rem;
+  }
+  .dot{
+    width:8px; height:8px; border-radius:50%; background:var(--pink-3); cursor:pointer; transition:.25s;
+    border:none; padding:0;
+  }
+  .dot.active{ background:var(--rose); width:22px; border-radius:5px; }
+
+  .counter{
+    text-align:center; margin-top:1rem; font-size:.85rem; color:var(--rose); letter-spacing:.05em;
+  }
+
+  .hint-note{
+    text-align:center; max-width:480px; margin:2rem auto 0; font-size:.8rem; color:#a97686;
+    background:#fff; border:1px dashed var(--pink-3); border-radius:14px; padding:.9rem 1.1rem; line-height:1.6;
+  }
+  .hint-note code{ background:var(--pink-1); padding:1px 5px; border-radius:5px; color:var(--rose); }
+
+  /* Letter section */
+  .letter-section{ padding:4rem 1.5rem 6rem; }
+  .letter{
+    max-width:620px; margin:0 auto; background:#fff; border-radius:28px;
+    padding:3rem clamp(1.5rem, 5vw, 3.5rem); box-shadow:0 25px 50px -20px rgba(224,96,126,.3);
+    position:relative;
+  }
+  .letter::before{
+    content:'❝'; position:absolute; top:-28px; left:50%; transform:translateX(-50%);
+    font-size:3rem; color:var(--pink-4); background:var(--cream); width:56px; height:56px;
+    border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 20px rgba(224,96,126,.25);
+  }
+  .letter p{
+    font-size:1.05rem; line-height:1.9; color:#5c3b46; margin:0 0 1.3rem 0;
+  }
+  .letter p:last-of-type{ margin-bottom:0; }
+  .letter .signoff{
+    margin-top:2rem; font-family:'Playfair Display', serif; font-style:italic; font-size:1.3rem; color:var(--rose); text-align:right;
+  }
+
+  /* Stats */
+  .stats{
+    display:flex; flex-wrap:wrap; justify-content:center; gap:1.2rem;
+    max-width:700px; margin:0 auto 4rem; padding:0 1.5rem;
+  }
+  .stat-card{
+    background:#fff; border-radius:18px; padding:1.4rem 1.7rem; text-align:center;
+    box-shadow:0 15px 30px -15px rgba(224,96,126,.25); min-width:130px; flex:1;
+  }
+  .stat-card .n{ font-family:'Playfair Display', serif; font-size:1.9rem; color:var(--rose); }
+  .stat-card .l{ font-size:.75rem; text-transform:uppercase; letter-spacing:.12em; color:#a97686; margin-top:.3rem; }
+
+  footer{
+    text-align:center; padding:3rem 1.5rem 4rem; color:#b98494; font-size:.85rem;
+  }
+  footer .heart{ color:var(--rose); }
+
+  @media (max-width:480px){
+    .carousel{ border-radius:18px; }
+    .letter{ border-radius:22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hearts-bg" id="heartsBg"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="heart-icon">💗</div>
+  <div class="eyebrow">Happy Anniversary</div>
+  <h1>Three <em>Beautiful</em> Months<br>With You</h1>
+  <p class="sub">Ninety-something days in, and every one of them has felt like a reason to smile. Here's a little collection of us — and a few words straight from my heart.</p>
+  <div class="scroll-hint">scroll down ↓</div>
+</section>
+
+<!-- CAROUSEL -->
+<section class="carousel-section">
+  <div class="section-heading">
+    <div class="tag">Our Memories</div>
+    <h2>A Few Of My Favorite Moments</h2>
+  </div>
+
+  <div class="carousel-wrap">
+    <div class="carousel">
+      <div class="carousel-track" id="track"></div>
+      <button class="carousel-btn prev" id="prevBtn" aria-label="Previous">&#10094;</button>
+      <button class="carousel-btn next" id="nextBtn" aria-label="Next">&#10095;</button>
+    </div>
+    <div class="dots" id="dots"></div>
+    <div class="counter" id="counter"></div>
+
+    <div class="hint-note">
+      To add your own photos: create a folder named <code>photos</code> next to this file, and drop your pictures in named <code>1.jpg</code>, <code>2.jpg</code> … up to <code>20.jpg</code> (jpg or png both work). They'll appear here automatically — no code editing needed. Feel free to edit the little captions in the file too!
+    </div>
+  </div>
+</section>
+
+<!-- LETTER -->
+<section class="letter-section">
+  <div class="letter">
+    <p>Three months ago, I had no idea how much brighter my days were about to get. Somewhere between the late-night texts, the inside jokes that make no sense to anyone else, and the little moments that turned into favorite memories, you became one of my favorite parts of everyday life.</p>
+    <p>I love how easy it is to be myself with you, how you make ordinary days feel a little more exciting, and how even the small things — like the way you laugh or how you check in on me — mean so much. These three months have gone by fast, but they're full of moments I wouldn't trade for anything.</p>
+    <p>Here's to more pictures to add to this little gallery, more memories to make, and more months to celebrate together. Thank you for being exactly who you are. I'm so glad it's you.</p>
+    <div class="signoff">— happy 3 months, my love 🤍</div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat-card"><div class="n">3</div><div class="l">Months</div></div>
+  <div class="stat-card"><div class="n">~90</div><div class="l">Days</div></div>
+  <div class="stat-card"><div class="n">∞</div><div class="l">Memories to go</div></div>
+</div>
+
+<footer>
+  made with <span class="heart">♥</span> for us
+</footer>
+
+<script>
+(function(){
+  // ---- Floating hearts background ----
+  const bg = document.getElementById('heartsBg');
+  const symbols = ['💗','💕','🤍','♡'];
+  for(let i=0;i<18;i++){
+    const el = document.createElement('div');
+    el.className = 'heart-particle';
+    el.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+    el.style.left = Math.random()*100 + 'vw';
+    el.style.fontSize = (1 + Math.random()*1.4) + 'rem';
+    el.style.animationDuration = (10 + Math.random()*12) + 's';
+    el.style.animationDelay = (Math.random()*14) + 's';
+    bg.appendChild(el);
+  }
+
+  // ---- Carousel ----
+  const TOTAL = 20;
+  const captions = []; // optional: captions[0] = "Our first date"; edit freely, index starts at 0 for photo 1.jpg
+
+  const track = document.getElementById('track');
+  const dotsWrap = document.getElementById('dots');
+  const counter = document.getElementById('counter');
+  let current = 0;
+  let autoplayTimer;
+
+  for(let i=1;i<=TOTAL;i++){
+    const slide = document.createElement('div');
+    slide.className = 'slide';
+
+    const img = document.createElement('img');
+    img.src = 'photos/' + i + '.jpg';
+    img.alt = 'Photo ' + i;
+    img.loading = 'lazy';
+
+    const placeholder = document.createElement('div');
+    placeholder.className = 'placeholder';
+    placeholder.innerHTML = '<div class="num">' + i + '</div><small>Add photos/' + i + '.jpg (or .png) to fill this spot 💗</small>';
+    placeholder.style.display = 'none';
+
+    const extFallbacks = ['jpeg', 'png', 'JPG', 'JPEG', 'PNG'];
+    img.onerror = function(){
+      const next = extFallbacks.shift();
+      if(next){
+        img.src = 'photos/' + i + '.' + next;
+      } else {
+        img.style.display = 'none';
+        placeholder.style.display = 'flex';
+      }
+    };
+
+    slide.appendChild(img);
+    slide.appendChild(placeholder);
+
+    if(captions[i-1]){
+      const cap = document.createElement('div');
+      cap.className = 'caption';
+      cap.textContent = captions[i-1];
+      slide.appendChild(cap);
+    }
+
+    track.appendChild(slide);
+
+    const dot = document.createElement('button');
+    dot.className = 'dot' + (i===1 ? ' active' : '');
+    dot.addEventListener('click', () => goTo(i-1));
+    dotsWrap.appendChild(dot);
+  }
+
+  function update(){
+    track.style.transform = 'translateX(-' + (current*100) + '%)';
+    [...dotsWrap.children].forEach((d,idx) => d.classList.toggle('active', idx===current));
+    counter.textContent = (current+1) + ' / ' + TOTAL;
+  }
+
+  function goTo(i){
+    current = (i + TOTAL) % TOTAL;
+    update();
+    resetAutoplay();
+  }
+
+  document.getElementById('prevBtn').addEventListener('click', () => goTo(current-1));
+  document.getElementById('nextBtn').addEventListener('click', () => goTo(current+1));
+
+  function resetAutoplay(){
+    clearInterval(autoplayTimer);
+    autoplayTimer = setInterval(() => goTo(current+1), 4500);
+  }
+  resetAutoplay();
+
+  // swipe support
+  let startX = null;
+  const carouselEl = document.querySelector('.carousel');
+  carouselEl.addEventListener('touchstart', e => startX = e.touches[0].clientX, {passive:true});
+  carouselEl.addEventListener('touchend', e => {
+    if(startX===null) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    if(dx > 40) goTo(current-1);
+    else if(dx < -40) goTo(current+1);
+    startX = null;
+  }, {passive:true});
+
+  // keyboard support
+  document.addEventListener('keydown', e => {
+    if(e.key === 'ArrowLeft') goTo(current-1);
+    if(e.key === 'ArrowRight') goTo(current+1);
+  });
+
+  update();
+})();
+</script>
+
+</body>
+</html>
