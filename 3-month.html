@@ -265,7 +265,7 @@
 
   // ---- Carousel ----
   const TOTAL = 20;
-  const captions = []; // optional: captions[0] = "Our first date"; edit freely, index starts at 0 for photo 1.jpg
+  const captions = []; // optional: captions[0] = "Our first date"; edit freely, index starts at 0 for photo 1
 
   const track = document.getElementById('track');
   const dotsWrap = document.getElementById('dots');
@@ -278,20 +278,20 @@
     slide.className = 'slide';
 
     const img = document.createElement('img');
-    img.src = 'photos/' + i + '.jpg';
+    img.src = i + '.jpeg';
     img.alt = 'Photo ' + i;
     img.loading = 'lazy';
 
     const placeholder = document.createElement('div');
     placeholder.className = 'placeholder';
-    placeholder.innerHTML = '<div class="num">' + i + '</div><small>Add photos/' + i + '.jpg (or .png) to fill this spot 💗</small>';
+    placeholder.innerHTML = '<div class="num">' + i + '</div><small>Add ' + i + '.jpeg to the repo root to fill this spot 💗</small>';
     placeholder.style.display = 'none';
 
-    const extFallbacks = ['jpeg', 'png', 'JPG', 'JPEG', 'PNG'];
+    const extFallbacks = ['jpg', 'png', 'JPG', 'JPEG', 'PNG'];
     img.onerror = function(){
       const next = extFallbacks.shift();
       if(next){
-        img.src = 'photos/' + i + '.' + next;
+        img.src = i + '.' + next;
       } else {
         img.style.display = 'none';
         placeholder.style.display = 'flex';
